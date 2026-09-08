@@ -52,6 +52,8 @@ export async function initRommSection(): Promise<void> {
         zaparooHost: current?.zaparooHost ?? "",
         zaparooPort: current?.zaparooPort ?? 7497,
         zaparooApiKey: current?.zaparooApiKey,
+        zaparooRomsRoot: current?.zaparooRomsRoot,
+        rommPathStripPrefix: current?.rommPathStripPrefix,
         rommOrigin: origin,
       },
     });

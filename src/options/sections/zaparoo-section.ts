@@ -7,6 +7,8 @@ export async function initZaparooSection(): Promise<void> {
   const hostInput = document.querySelector<HTMLInputElement>("#zaparoo-host")!;
   const portInput = document.querySelector<HTMLInputElement>("#zaparoo-port")!;
   const keyInput = document.querySelector<HTMLInputElement>("#zaparoo-key")!;
+  const romsRootInput = document.querySelector<HTMLInputElement>("#zaparoo-roms-root")!;
+  const stripPrefixInput = document.querySelector<HTMLInputElement>("#zaparoo-path-strip-prefix")!;
   const saveBtn = document.querySelector<HTMLButtonElement>("#zaparoo-save")!;
   const testBtn = document.querySelector<HTMLButtonElement>("#zaparoo-test")!;
   const statusEl = document.querySelector<HTMLElement>("#zaparoo-status")!;
@@ -17,6 +19,8 @@ export async function initZaparooSection(): Promise<void> {
     hostInput.value = settings.zaparooHost ?? "";
     portInput.value = String(settings.zaparooPort ?? DEFAULT_ZAPAROO_PORT);
     keyInput.value = settings.zaparooApiKey ?? "";
+    romsRootInput.value = settings.zaparooRomsRoot ?? "";
+    stripPrefixInput.value = settings.rommPathStripPrefix ?? "";
   } else {
     portInput.value = String(DEFAULT_ZAPAROO_PORT);
   }
@@ -25,6 +29,8 @@ export async function initZaparooSection(): Promise<void> {
     const host = hostInput.value.trim();
     const port = Number(portInput.value) || DEFAULT_ZAPAROO_PORT;
     const apiKey = keyInput.value.trim() || undefined;
+    const romsRoot = romsRootInput.value.trim() || undefined;
+    const stripPrefix = stripPrefixInput.value.trim() || undefined;
 
     if (!host) {
       statusEl.textContent = "Enter a host or IP first.";
@@ -50,6 +56,8 @@ export async function initZaparooSection(): Promise<void> {
         zaparooHost: host,
         zaparooPort: port,
         zaparooApiKey: apiKey,
+        zaparooRomsRoot: romsRoot,
+        rommPathStripPrefix: stripPrefix,
       },
     });
 

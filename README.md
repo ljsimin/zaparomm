@@ -65,14 +65,28 @@ Real network discovery of Zaparoo isn't possible from inside a browser
 extension, so the host/IP has to be entered manually — check your Zaparoo
 device's own settings or router for its address.
 
+**Optional — direct path launching:** if Zaparoo and RomM read the exact same
+ROM files (e.g. both pointed at the same network share), fill in **Zaparoo
+roms root path** with the path Zaparoo sees for RomM's library root (e.g.
+`/media/fat/games`). Launches will then use the file's exact path instead of
+guessing by name — more reliable, and works even for games Zaparoo hasn't
+indexed a good title match for. RomM's own paths usually start with an extra
+folder name that isn't part of the shared structure (commonly `roms/`) — if
+a test launch shows up with that in the wrong place, set **RomM path prefix
+to remove** to strip it (e.g. `roms/`). This only works if the folder layout
+is otherwise identical on both sides beneath that root; if it isn't (or
+launching by path fails for some other reason), the extension automatically
+falls back to guessing by name.
+
 ### Launching a game
 
 Open any game's page on RomM. A **Launch on Zaparoo** button appears next to
 RomM's own Play/Download buttons, along with a small gear/pencil icon next to
 it.
 
-- Clicking **Launch on Zaparoo** looks up the game on Zaparoo (using RomM's
-  platform and game name) and launches it if a confident match is found.
+- Clicking **Launch on Zaparoo** first tries a direct file-path launch (if
+  configured above), then falls back to looking the game up on Zaparoo by
+  platform and name, launching whichever succeeds first.
 - If no confident match is found, or the launch fails, a search screen opens
   automatically so you can pick the right platform and game yourself.
 - The Launch button is hidden automatically if Zaparoo has no games at all

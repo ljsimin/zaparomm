@@ -3,6 +3,8 @@ export interface RomMRomSummary {
   name: string;
   platformDisplayName: string;
   platformSlug: string;
+  /** Path to the rom file, relative to RomM's own library root (its `full_path`). */
+  fullPath: string;
 }
 
 export interface ZaparooSystem {
@@ -51,6 +53,19 @@ export interface ZaparooSettings {
   zaparooPort: number;
   zaparooApiKey?: string;
   rommOrigin: string;
+  /**
+   * Path on the Zaparoo device's own filesystem that corresponds to RomM's library root,
+   * for direct file-path launches. Only works when both point at the same underlying
+   * folder structure (e.g. a shared network share for the ROM library). Optional — when
+   * unset, launches fall back to name/platform lookup.
+   */
+  zaparooRomsRoot?: string;
+  /**
+   * A leading segment of RomM's own relative rom path to drop before joining it onto
+   * zaparooRomsRoot. RomM's API path includes its internal roms folder name (commonly
+   * "roms/"), which usually isn't part of the shared folder structure Zaparoo sees.
+   */
+  rommPathStripPrefix?: string;
 }
 
 export type LaunchError =

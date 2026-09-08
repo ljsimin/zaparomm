@@ -18,7 +18,7 @@ import {
   MEDIA_LOOKUP_CONFIDENCE_THRESHOLD,
 } from "../common/constants";
 import { mapRommPlatformToZaparooSystem } from "../common/platform-map";
-import type { RuntimeResponse, ZaparooSettings } from "../common/types";
+import type { RomMRomSummary, RuntimeResponse, ZaparooSettings } from "../common/types";
 import {
   ZaparooApiError,
   listSystems,
@@ -99,10 +99,31 @@ async function requireSettings(): Promise<ZaparooSettings> {
   return settings;
 }
 
+/**
+ * Builds a direct-file-path ZapScript command, when a Zaparoo roms root is configured.
+ * Only correct when Zaparoo's filesystem and RomM's library point at the same underlying
+ * folder structure (e.g. both reading the same shared ROM storage) — see the settings page.
+ */
+function buildPathLaunchScript(settings: ZaparooSettings, rom: RomMRomSummary): string | null {
+  if (!settings.zaparooRomsRoot) return null;
+
+  const root = settings.zaparooRomsRoot.replace(/\/+$/, "");
+  let relative = rom.fullPath.replace(/^\/+/, "");
+  const stripPrefix = settings.rommPathStripPrefix?.replace(/^\/+/, "");
+  if (stripPrefix && relative.startsWith(stripPrefix)) {
+    relative = relative.slice(stripPrefix.length).replace(/^\/+/, "");
+  }
+  const absolutePath = `${root}/${relative}`;
+
+  const systemId = mapRommPlatformToZaparooSystem(rom.platformSlug);
+  const suffix = systemId ? `?system=${systemId}` : "";
+  return `**launch:${absolutePath}${suffix}`;
+}
+
 async function handleLaunch(
   romId: number,
   rommOrigin: string,
-  rom: { name: string; platformDisplayName: string; platformSlug: string }
+  rom: RomMRomSummary
 ): Promise<RuntimeResponse> {
   const key = `${rommOrigin}:${romId}`;
   try {
@@ -112,6 +133,24 @@ async function handleLaunch(
     if (override) {
       await runZapScript(settings, override.zapScript);
       return { ok: true, data: null };
+    }
+
+    const pathScript = buildPathLaunchScript(settings, rom);
+    if (pathScript) {
+      try {
+        await runZapScript(settings, pathScript);
+        return { ok: true, data: null };
+      } catch (err) {
+        const category = err instanceof ZaparooApiError ? err.category : "execution_failed";
+        const message = err instanceof Error ? err.message : String(err);
+        await appendErrorLog({
+          category: `path_launch_${category}`,
+          message: `Direct path launch failed, falling back to name lookup: ${message}`,
+          romId,
+          romName: rom.name,
+          platformName: rom.platformDisplayName,
+        });
+      }
     }
 
     const systemQuery = mapRommPlatformToZaparooSystem(rom.platformSlug) ?? rom.platformDisplayName;

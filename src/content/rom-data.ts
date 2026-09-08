@@ -7,6 +7,7 @@ interface RommApiRom {
   name: string | null;
   platform_display_name: string;
   platform_slug: string;
+  full_path: string;
 }
 
 export function extractRomId(pathname: string): number | null {
@@ -32,6 +33,7 @@ export function fetchRomData(romId: number): Promise<RomMRomSummary | null> {
         name: data.name ?? "",
         platformDisplayName: data.platform_display_name,
         platformSlug: data.platform_slug,
+        fullPath: data.full_path,
       };
     })
     .catch(() => null);

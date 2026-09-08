@@ -27,6 +27,20 @@
       <input id="zaparoo-port" type="number" placeholder="7497" />
       <label for="zaparoo-key">API key (optional)</label>
       <input id="zaparoo-key" type="password" placeholder="Leave blank if not required" />
+      <label for="zaparoo-roms-root">Zaparoo roms root path (optional)</label>
+      <input id="zaparoo-roms-root" type="text" placeholder="/media/fat/games" />
+      <label for="zaparoo-path-strip-prefix">RomM path prefix to remove (optional)</label>
+      <input id="zaparoo-path-strip-prefix" type="text" placeholder="roms/" />
+      <p class="hint">
+        If Zaparoo and RomM read the same ROM files (e.g. a shared network
+        folder), set the roms root path above to where Zaparoo sees RomM's
+        library. RomM's own file paths often start with an extra folder name
+        (commonly <code>roms/</code>) that isn't part of that shared
+        structure — use the prefix field to strip it, if a test launch shows
+        it in the wrong place. Launches then use the exact file path instead
+        of guessing by name, falling back to guessing only if that fails.
+        Leave both blank to always guess by name.
+      </p>
       <div class="row">
         <button id="zaparoo-save">Save</button>
         <button id="zaparoo-test">Test connection</button>

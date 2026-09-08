@@ -213,6 +213,8 @@ export async function showFailoverUI(options: FailoverOptions): Promise<void> {
         name: options.romName,
         platformDisplayName: selected.system.name,
         platformSlug: selected.system.id,
+        // Unused: the override just saved above takes precedence over path/lookup launching.
+        fullPath: "",
       },
     });
 
