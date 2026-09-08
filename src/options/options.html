@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Zaparoo for RomM — Settings</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <main class="page">
+    <h1>Zaparoo for RomM</h1>
+
+    <section id="romm-section">
+      <h2>RomM connection</h2>
+      <label for="romm-url">RomM URL</label>
+      <input id="romm-url" type="text" placeholder="https://roms.example.com" />
+      <div class="row">
+        <button id="romm-save">Save &amp; grant permission</button>
+        <span id="romm-status" class="status"></span>
+      </div>
+    </section>
+
+    <section id="zaparoo-section">
+      <h2>Zaparoo connection</h2>
+      <label for="zaparoo-host">Host or IP</label>
+      <input id="zaparoo-host" type="text" placeholder="192.168.1.50" />
+      <label for="zaparoo-port">Port</label>
+      <input id="zaparoo-port" type="number" placeholder="7497" />
+      <label for="zaparoo-key">API key (optional)</label>
+      <input id="zaparoo-key" type="password" placeholder="Leave blank if not required" />
+      <div class="row">
+        <button id="zaparoo-save">Save</button>
+        <button id="zaparoo-test">Test connection</button>
+        <span id="zaparoo-status" class="status"></span>
+      </div>
+    </section>
+
+    <section id="error-log-section">
+      <h2>Error log</h2>
+      <p class="hint">Entries older than 24 hours are removed automatically.</p>
+      <div class="row">
+        <button id="error-log-clear">Clear log</button>
+      </div>
+      <table id="error-log-table">
+        <thead>
+          <tr><th>Time</th><th>Category</th><th>Game</th><th>Platform</th><th>Message</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="overrides-section">
+      <h2>Saved launch targets</h2>
+      <table id="overrides-table">
+        <thead>
+          <tr><th>RomM game</th><th>Mapped to (Zaparoo)</th><th>Saved</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <script type="module" src="options.js"></script>
+</body>
+</html>
