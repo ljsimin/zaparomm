@@ -10,13 +10,23 @@
     <h1>Zaparoo for RomM</h1>
 
     <section id="romm-section">
-      <h2>RomM connection</h2>
+      <h2>RomM sites</h2>
+      <p class="hint">
+        Add every RomM site you want the Launch button to appear on. Each one
+        needs its own browser permission grant.
+      </p>
       <label for="romm-url">RomM URL</label>
       <input id="romm-url" type="text" placeholder="https://roms.example.com" />
       <div class="row">
-        <button id="romm-save">Save &amp; grant permission</button>
+        <button id="romm-add">Add &amp; grant permission</button>
         <span id="romm-status" class="status"></span>
       </div>
+      <table id="romm-sites-table">
+        <thead>
+          <tr><th>Site</th><th>Permission</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
 
     <section id="zaparoo-section">

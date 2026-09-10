@@ -30,14 +30,12 @@ import {
 
 const CONTENT_SCRIPT_ID = "zaparomm-romm-content-script";
 
-async function registerRommContentScript(origin: string): Promise<void> {
+async function registerRommContentScripts(origins: string[]): Promise<void> {
   const scripting = (browser as unknown as { scripting?: any }).scripting;
   if (!scripting?.registerContentScripts) {
     console.warn("scripting.registerContentScripts unavailable; content script must be added manually.");
     return;
   }
-
-  const matches = [`${origin.replace(/\/$/, "")}/*`];
 
   try {
     const existing: Array<{ id: string }> = await scripting.getRegisteredContentScripts?.({
@@ -49,6 +47,10 @@ async function registerRommContentScript(origin: string): Promise<void> {
   } catch {
     // no prior registration; ignore
   }
+
+  if (origins.length === 0) return;
+
+  const matches = origins.map((origin) => `${origin.replace(/\/$/, "")}/*`);
 
   await scripting.registerContentScripts([
     {
@@ -62,12 +64,10 @@ async function registerRommContentScript(origin: string): Promise<void> {
 
 async function reassertRegistration(): Promise<void> {
   const settings = await getSettings();
-  if (settings?.rommOrigin) {
-    try {
-      await registerRommContentScript(settings.rommOrigin);
-    } catch (err) {
-      console.error("Failed to register RomM content script", err);
-    }
+  try {
+    await registerRommContentScripts(settings?.rommOrigins ?? []);
+  } catch (err) {
+    console.error("Failed to register RomM content scripts", err);
   }
 }
 
@@ -255,8 +255,9 @@ onMessage((message) => {
     case "SAVE_SETTINGS":
       return saveSettings(message.settings).then(() => ({ ok: true, data: null }) as RuntimeResponse);
 
-    case "REGISTER_ROMM_CONTENT_SCRIPT":
-      return registerRommContentScript(message.origin)
+    case "REGISTER_ROMM_CONTENT_SCRIPTS":
+      return getSettings()
+        .then((settings) => registerRommContentScripts(settings?.rommOrigins ?? []))
         .then(() => ({ ok: true, data: null }) as RuntimeResponse)
         .catch((err) => toErrorResponse(err));
 

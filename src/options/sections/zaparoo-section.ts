@@ -52,7 +52,7 @@ export async function initZaparooSection(): Promise<void> {
     await sendMessage({
       type: "SAVE_SETTINGS",
       settings: {
-        rommOrigin: current?.rommOrigin ?? "",
+        rommOrigins: current?.rommOrigins ?? [],
         zaparooHost: host,
         zaparooPort: port,
         zaparooApiKey: apiKey,

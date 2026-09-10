@@ -54,7 +54,23 @@ export async function sweepErrorLog(): Promise<void> {
 
 export async function getSettings(): Promise<ZaparooSettings | undefined> {
   const result = await browser.storage.local.get(STORAGE_KEYS.settings);
-  return result[STORAGE_KEYS.settings] as ZaparooSettings | undefined;
+  const raw = result[STORAGE_KEYS.settings] as (ZaparooSettings & { rommOrigin?: string }) | undefined;
+  if (!raw) return raw;
+
+  // Migrate from the single-RomM-site settings shape (rommOrigin: string) to the current
+  // multi-site shape (rommOrigins: string[]), used before multi-site support was added.
+  if (!Array.isArray(raw.rommOrigins) && typeof raw.rommOrigin === "string" && raw.rommOrigin) {
+    const migrated: ZaparooSettings = { ...raw, rommOrigins: [raw.rommOrigin] };
+    delete (migrated as { rommOrigin?: string }).rommOrigin;
+    await saveSettings(migrated);
+    return migrated;
+  }
+
+  if (!Array.isArray(raw.rommOrigins)) {
+    return { ...raw, rommOrigins: [] };
+  }
+
+  return raw;
 }
 
 export async function saveSettings(settings: ZaparooSettings): Promise<void> {

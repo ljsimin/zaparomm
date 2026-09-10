@@ -52,7 +52,7 @@ export interface ZaparooSettings {
   zaparooHost: string;
   zaparooPort: number;
   zaparooApiKey?: string;
-  rommOrigin: string;
+  rommOrigins: string[];
   /**
    * Path on the Zaparoo device's own filesystem that corresponds to RomM's library root,
    * for direct file-path launches. Only works when both point at the same underlying
@@ -88,7 +88,7 @@ export type RuntimeMessage =
   | { type: "CLEAR_ERROR_LOG" }
   | { type: "GET_SETTINGS" }
   | { type: "SAVE_SETTINGS"; settings: ZaparooSettings }
-  | { type: "REGISTER_ROMM_CONTENT_SCRIPT"; origin: string };
+  | { type: "REGISTER_ROMM_CONTENT_SCRIPTS" };
 
 export type RuntimeResponse<T = unknown> =
   | { ok: true; data: T }

@@ -53,9 +53,10 @@ its settings.
 The extension does nothing until it's told where RomM and Zaparoo are. Click
 the extension's toolbar icon to open its settings page:
 
-1. **RomM connection** — enter your RomM URL (e.g. `https://roms.example.com`)
-   and click **Save & grant permission**. Approve the browser's permission
-   prompt, then reload any open RomM tabs.
+1. **RomM sites** — enter a RomM URL (e.g. `https://roms.example.com`) and
+   click **Add & grant permission**. Approve the browser's permission prompt,
+   then reload any open RomM tabs. Add as many RomM sites as you use — each
+   gets its own row with a **Remove** button if you need to drop one later.
 2. **Zaparoo connection** — enter your Zaparoo Core device's host/IP and port
    (default `7497`). If your Zaparoo instance requires an API key, enter it —
    otherwise leave it blank. Click **Save**, then **Test connection** to
